@@ -1,8 +1,8 @@
 function main(){
 	//start here
 	const canvas = document.querySelector("#canvas");
-	canvas.width = 640;
-	canvas.height = 480;
+	//canvas.width = 640;
+	//canvas.height = 480;
 	const gl = canvas.getContext("webgl");
 	
 	//If we don't have a GL context, give up now.
@@ -12,6 +12,22 @@ function main(){
 	}
 	
 	//Vertex shader program
+	/*		着色器 （vsSource ）
+	 *			顶点着色器
+	 *每次渲染一个形状时，顶点着色器会在形状中的每个顶点运行。 它的工作是将输入顶点从原始坐标系转换到WebGL使用的缩放
+	 *空间(clipspace)坐标系，其中每个轴的坐标范围从-1.0到1.0，并且不考虑纵横比，实际尺寸或任何其他因素。顶点着色器需
+	 *要对顶点坐标进行必要的转换，在每个顶点基础上进行其他调整或计算，然后通过将其保存在由GLSL提供的特殊变量（我们称
+	 *为gl_Position）中来返回变换后的顶点顶点着色器根据需要， 也可以完成其他工作。例如，决定哪个包含 texel面部纹理的
+	 *坐标，可以应用于顶点；通过法线来确定应用到顶点的光照因子等。然后将这些信息存储在变量（varyings)或属性(attributes)
+	 *属性中，以便与片段着色器共享以下的顶点着色器接收一个我们定义的属性（aVertexPosition）的顶点位置值。这个位置值是两个
+	 *4x4矩阵uProjectionMatrix和uModelMatrix的乘积; gl_Position为结果值。有关投影和其他矩阵的更多信息，在这里（https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html）
+	 *您可能可以找到有帮助的文章.。
+	 *
+	 *		片段着色器（fsSource ）
+	 *片段着色器在顶点着色器处理完图形的顶点后，会被要绘制的每个图形的每个像素点调用一次。它的职责是确定像素的颜色，通过
+	 *指定应用到像素的纹理元素（也就是图形纹理中的像素），获取纹理元素的颜色，然后将应用适当的光照。之后颜色存储在特殊变量
+	 *gl_FragColor中，返回到WebGL层。该颜色将最终绘制到屏幕上图形对应像素的对应位置。
+	*/
 	const vsSource = `
 		attribute vec4 aVertexPosition;
 		uniform mat4 uModelViewMatrix;
@@ -38,6 +54,14 @@ function main(){
 	//Look up which attributre our shader program is using
 	//for aVertexPosition and look up uniform locations.
 	const programInfo = {
+		/*在创建着色器程序之后，
+		 *我们需要查找WebGL返回分配的输入位置。
+		 *在上述情况下，我们有一个属性和两个uniforms。
+		 *属性从缓冲区接收值。顶点着色器的每次迭代都从分配给该属性的缓冲区接收下一个值。
+		 *uniforms类似于JavaScript全局变量。它们在着色器的所有迭代中保持相同的值。
+		 *由于属性和统一的位置是特定于单个着色器程序的，
+		 *因此我们将它们存储在一起以使它们易于传递
+		*/
 		program : shaderProgram,
 		attribLocations: {
 			vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition')
@@ -63,6 +87,21 @@ function main(){
 //a simple two-dimensional square.
 
 function initBuffers(gl){
+	/*		创建对象
+	 *在画正方形前，
+	 *我们需要创建一个缓冲器来存储它的顶点。
+	 *我们会用到名字为 initBuffers() 的函数。
+	 *当我们了解到更多WebGL 的高级概念时，
+	 *这段代码会将有更多参数，变得更加复杂，并且用来创建更多的三维物体。
+	 *
+	 *
+	 *这段代码简单给出了绘画场景的本质。
+	 *首先，它调用 gl 的成员函数 createBuffer() 得到了缓冲对象并存储在顶点缓冲器。
+	 *然后调用 bindBuffer() 函数绑定上下文。
+	 *当上一步完成，我们创建一个Javascript 数组去记录每一个正方体的每一个顶点。
+	 *然后将其转化为 WebGL 浮点型类型的数组，
+	 *并将其传到 gl 对象的  bufferData() 方法来建立对象的顶点
+	*/
 	//Create a buffer for the square's positions.
 	const positionBuffer = gl.createBuffer();
 	
@@ -91,6 +130,19 @@ function initBuffers(gl){
 
 //draw the scene
 function drawScene(gl, programInfo, buffers){
+	
+	/* 当着色器和物体都创建好后，我们可以开始渲染这个场景了。
+	 * 因为我们这个例子不会产生动画，所以 drawScene() 方法非常简单。
+	 * 它还使用了几个工具函数，稍后我们会介绍。
+	 *
+	 * 第一步，用背景色擦除上下文，接着建立摄像机透视矩阵。
+	 * 			设置45度的视图角度，并且宽高比设为 640/480（画布尺寸）。
+	 * 			指定在摄像机距离0.1到100单位长度的范围内，物体可见。
+	 *
+	 * 接着加载特定位置，并把正方形放在距离摄像机6个单位的的位置。
+	 * 然后，我们绑定正方形的顶点缓冲到上下文，
+	 * 并配置好，再通过调用 drawArrays() 方法来画出对象。 
+	*/
 	gl.clearColor(0.0, 0.0, 0.0, 1.0); //Clear to black, fully opaque
 	gl.clearDepth(1.0); //clear everything
 	gl.enable(gl.DEPTH_TEST); //enable depth testing.
@@ -190,6 +242,26 @@ function initShaderProgram(gl, vsSource, fsSource){
 
 //creates a shader of the given type, uploads the source and compiles it.
 function loadShader(gl, type, source){
+	/*
+	 *loadShader函数将WebGL上下文，着色器类型和源码作为参数输入，
+	 *然后按如下步骤创建和编译着色器：
+	 *
+	 *
+	 *1. 调用gl.createShader().创建一个新的着色器。
+	 *
+	 *2. 调用gl.shaderSource().将源代码发送到着色器。
+	 *
+	 *3. 一旦着色器获取到源代码，就使用gl.compileShader().进行编译。
+	 *
+	 *4. 为了检查是否成功编译了着色器，将检查着色器参数gl.COMPILE_STATUS状态。通过调用gl.
+	 *
+	 *5. 如果着色器被加载并成功编译，则返回编译的着色器。
+	 *
+	 *我们可以像这样调用这段代码
+	 *
+	 *const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+	*/
+	
 	const shader = gl.createShader(type);
 	
 	//send the source to the shader object.
