@@ -1,8 +1,6 @@
 function main(){
-    const canvas = document.querySelector("#glcanvas");
+    const canvas = document.querySelector('#glcanvas');
     const gl = canvas.getContext("webgl");
-    gl.width = 600;
-    gl.height = 480;
     
     //If we don't have a GL context, give up now.
     if(!gl){
@@ -22,7 +20,7 @@ function main(){
         
         varying lowp vec4 vColor;
         
-        void mian(void){
+        void main(void){
             gl_Position = uProjectionMatrix * uModelViewMatrix *  aVertexPosition;
             vColor = aVertexColor;
         }
@@ -33,7 +31,7 @@ function main(){
     const fsSource = `
         varying lowp vec4 vColor;
         
-        void main(void){
+        void main(){
             gl_FragColor = vColor;
         }
     `;
@@ -51,12 +49,12 @@ function main(){
         program : shaderProgram,
         attribLocations : {
             vertexPosition : gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-            vertexColor : gl.getAttribLocation(shaderProgram, 'aVertexColor')
+            vertexColor : gl.getAttribLocation(shaderProgram, 'aVertexColor'),
         },
         uniformLocations : {
           projectionMatrix : gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-          modelViewMatrix : gl.getUniformLocation(shaderProgram, 'uModelViewMatrix')
-        }
+          modelViewMatrix : gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+        },
     };
     
     //Here's where we call the routine that builds all the object we'll be drawing.
@@ -78,18 +76,18 @@ function initBuffers(gl){
     
     //Select the positionBuffer as the one to apply buffer operations to from here out.
     
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     
     //Now create an array of positions for the square.
     
     const positions = [
-                        1.0, 1.0,
-                        -1.0, 1.0,
-                        1.0, -1.0,
-                        -1.0, -1.0
+                        211.0, 1.0,
+                        -211.0, 1.0,
+                        211.0, -1.0,
+                        -211.0, -1.0
                        ];
 
-//Now pass the list of positions into WebGl to build the
+//Now pass the list of positions into WebGL to build the
 //shape. We do this by creating a Float32Array from the
 //JavaScript array, then use it to fill the current buffer.
 
@@ -106,11 +104,11 @@ function initBuffers(gl){
     
     const colorBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new float32Array(colors), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
     
     return {
-        position : positonBuffer,
-        color: colorBuffer
+        position : positionBuffer,
+        color: colorBuffer,
     };
 }
 
@@ -119,7 +117,7 @@ function initBuffers(gl){
 function drawScene(gl, programInfo, buffers){
     gl.clearColor(0.0, 0.0, 0.0, 1.0); //Clear to black, fully opaque
     gl.clearDepth(1.0); //Clear everything
-    gl.enable(gl.DEPTH_TEST); //Enable ddepth testing
+    gl.enable(gl.DEPTH_TEST); //Enable depth testing
     gl.depthFunc(gl.LEQUAL); //Near things obscure far things
     
     //Clear the canvas before we start drawing on it
@@ -133,7 +131,7 @@ function drawScene(gl, programInfo, buffers){
   // and 100 units away from the camera.
         
     const fieldOfView = 45 * Math.PI /180; //in radians
-    const aspect = gl.canvas.clienWidth //gl.canvas.clientHeight;
+    const aspect = gl.canvas.clientWidth; //gl.canvas.clientHeight;
     const zNear = 0.1;
     const zFar = 100.0;
     const projectionMatrix = mat4.create();
@@ -162,17 +160,17 @@ function drawScene(gl, programInfo, buffers){
   // buffer into the vertexPosition attribute
   
   {
-    const numcomponents = 2;
+    const numComponents = 2;
     const type = gl.FLOAT;
     const normalize = false;
     const stride = 0;
     const offset = 0;
-    gl.bindBuffer(gl,ARRAY_BUFFER, buffers.position);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
     gl.vertexAttribPointer(
                            programInfo.attribLocations.vertexPosition,
                            numComponents,
                            type,
-                           normaliize,
+                           normalize,
                            stride,
                            offset
                            );
@@ -190,7 +188,7 @@ function drawScene(gl, programInfo, buffers){
         const stride = 0;
         const offset = 0;
         
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer.color);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
         gl.vertexAttribPointer(
                                 programInfo.attribLocations.vertexColor,
                                 numComponents,
@@ -211,7 +209,7 @@ function drawScene(gl, programInfo, buffers){
     //Set the shader uniforms
     
     gl.uniformMatrix4fv(
-                            programInfo.uniformlocations.projectionMatrix,
+                            programInfo.uniformLocations.projectionMatrix,
                             false,
                             projectionMatrix
                         );
@@ -241,7 +239,7 @@ function initShaderProgram(gl, vsSource, fsSource){
     gl.attachShader(shaderProgram, fragmentShader);
     gl.linkProgram(shaderProgram);
     
-    //If create the shader program failed alert
+    //If creating the shader program failed alert
     
     if(!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)){
         
@@ -275,15 +273,3 @@ function loadShader(gl, type, source){
     }
     return shader;
 }
-
-
-
-
-
-
-
-
-
-
-
-
