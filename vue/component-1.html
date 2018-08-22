@@ -2,6 +2,10 @@
     <head>
         <script src="js/vue.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+        <script>
+  
+           
+        </script>
     </head>
     
     <body>
@@ -9,36 +13,7 @@
             <locala></locala>
             <component-a></component-a>
         </div>
-        <div id="app2">
-            <c-base-checkbox v-model="lovingVue" v-bind:checked='true'></c-base-checkbox>
-        </div>
         <script>
-             Vue.component("c-base-checkbox", {
-                model : {
-                    prop : 'checked',
-                    event : "change"
-                },
-                props : {
-                    checked : Boolean,
-                },
-                template : `
-                    <input 
-                        type="checkbox"
-                        v-bind:checked = "checked",
-                        v-on:change = "$emit('change', $event.target.checked)"
-                    />
-                `
-            });
-
-            var app8 = new Vue({
-                el : "#app2",
-                methods : {
-                    lovingVue : function(){
-                        alert("abc");
-                    }
-                }
-            });
-
             var componentA = {
                 template : '<div>a</div>'
             };
