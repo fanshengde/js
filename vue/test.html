@@ -1,0 +1,23 @@
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <div class="dynamic-component-demo-posts-tab">
+            <ul class="dynamic-component-demo-posts-sidebar">
+                <li  v-for="post in posts" v-bind:key="post.id" v-bind:class="{ 'dynamic-component-demo-active\': post === selectedPost }" v-on:click="selectedPost = post">
+                        {{ post.title }}
+                </li>
+            </ul>
+            <div class="dynamic-component-demo-post-container">
+                <div v-if="selectedPost" class="dynamic-component-demo-post">
+                    <h3>{{ selectedPost.title }}</h3>
+                    <div v-html="selectedPost.content"></div>
+                </div>
+                <strong v-else>
+                      Click on a blog title to the left to view it.
+                </strong>
+            </div>
+        </div>
+    </body>
+</html>

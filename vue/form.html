@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="cn">
+    <head>
+        <script src="js/vue.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <div id="app1">
+            <input v-model="message" placeholder="edit me"></input>
+            <p>Message is1 : {{ message }}</p>
+        </div>
+        <hr/>
+        <div id="app2">
+            <span>Multiline message2 is:</span>
+            <p style="white-space: pre-line;">{{ message }}</p>
+            <br>
+            <textarea v-model="message" placeholder="add multiple lines"></textarea>
+            
+        </div>
+        <hr/>
+        <div id="app3">
+            <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
+            <label for="jack">Jack</label>
+            
+            <input type="checkbox" id="mike" value="Mick" v-model="checkedNames" />
+            <label for="mike">Mike</label>
+            <span>Checked names3 : {{ checkedNames }} </span>
+        </div>
+        <hr/>
+        <div id="app4">
+            <input type="radio" id="one" value="One-1" v-model="picked">
+            <label for="one">One</label>
+            <br/>
+            <input type="radio" id="two" value="Two-2" v-model="picked">
+            <label for="two">Two</label>
+            <br/>
+            <span>Picked4 : {{ picked }}</span>
+        </div>
+        <hr/>
+        
+        <div id="app5">
+            <select v-model="selected">
+                <option disabled value="">请选择</option>
+                <option>A</option>
+                <options>B</options>
+            </select>
+            <br/>
+            <span>Selected5 :: {{ selected }}</span>
+        </div>
+        
+        <hr/>
+        <div id="app6">
+            <select v-model="selected">
+                <option>请选择</option>
+                <option v-for="option in options" v-bind:value="option.value">
+                    {{ option6.text }}
+                </option>
+            </select>
+            <br/>
+            <span>Selected6: {{ selected }}</span>
+        </div>
+        <hr/>
+        
+        <div id="app7">
+            <input type="checkbox" v-model="toggle"></input>
+            <span>checkbox7: {{ toggle }}</span>
+        </div>
+             <span>checkbox: {{ toggle }}</span>
+        </div>
+        
+        <hr/>
+        <div id="app8">
+            <input type="checkbox" v-model="toggle" true-value="yes" false-value="no"></input>
+            <span>checkbox8: {{ toggle }}</span>
+        </div>
+        <hr/>
+        <!-- 在“change”时而非“input”时更新 -->
+        <div id="app9">
+            <input v-model.lazy="msg"/>
+             <span>v-model.lazy: {{ msg }}</span>
+        </div> 
+        <hr/>
+        <div id ="app10">
+            <input v-model.number="age" type="number">
+        </div>
+        <hr/>
+        <!--如果要自动过滤用户输入的首尾空白字符，可以给 v-model 添加 trim 修饰符：-->
+        <div id="app11">
+            <input v-model.trim="msg">
+            <span>app11 : >{{ msg }}<</span>
+        </div>
+        
+        <script>
+            var app11 = new Vue({
+                el : "#app11",
+                data : {
+                    data : ''
+                }
+            });
+            var app10 = new Vue({
+                el : "#app10",
+                data : {
+                    age : 10
+                }
+            });
+            
+            var app9 = new Vue({
+                el : "#app9",
+                data : {
+                    msg : '',
+                }
+            });
+            
+            var app8 = new Vue({
+                el : "#app8",
+                data : {
+                    toggle : '',
+                }
+            });
+            
+            var app7 = new Vue({
+                el : "#app7",
+                data : {
+                    toggle : '',
+                }
+            });
+            
+            
+            var app6 = new Vue({
+                el : "#app6",
+                data : {
+                    selected : '',
+                    options :[
+                         { text: 'One', value: 'A' },
+                         { text: 'Two', value: 'B' },
+                         { text: 'Three', value: 'C' }
+                    ]
+                }
+            });
+            
+            
+            var app5 = new Vue({
+                el : "#app5",
+                data : {
+                    selected : '',
+                }
+            });
+            
+            var app4 = new Vue({
+                el : "#app4",
+                data : {
+                    picked : '',
+                }
+            });
+             
+             var app3 = new Vue({
+                el : "#app3",
+                data : {
+                    checkedNames : [],
+                }
+            });
+             
+             var app2 = new Vue({
+                el : "#app2",
+                data : {
+                    message : '',
+                }
+            });
+             
+            var app1 = new Vue({
+                el : "#app1",
+                data : {
+                    message : '123',
+                }
+            });
+        </script>
+    </body>
+</html>

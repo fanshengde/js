@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <script type="text/javascript" src="platform/jtopo-0.4.8-min.js"></script>
+        <script type="text/javascript" src="platform/jQuery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="platform/toolbar.js"></script>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <canvas width="800" height="600" id="canvas" style="border: 1px solid red; background-color: green;">不支持canvas插件，请更换浏览器</canvas>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+               var canvas = document.getElementById("canvas");
+               
+               var stage = new JTopo.Stage(canvas);
+               
+               var scene = new JTopo.Scene(stage);
+               
+               var node11 = newNode(10, 10, 50, 50, "node11");
+               var node12 = newNode(200, 18, 30, 30, "node12");
+               node11._id = "1234";
+               
+               var link1 = newLink(node11,node12,'Arrow', 15);
+               link1.arrowsRadius = 20; //箭头
+               
+               function newNode(x, y, w, h, text){
+                    var node = new JTopo.Node(text);
+                    node.setLocation(x, y);
+                    node.setSize(w, h);
+                    scene.add(node);
+                    return node;
+               }
+               
+                // 简单连线
+                function newLink(nodeA, nodeZ, text, dashedPattern){
+                    var link = new JTopo.Link(nodeA, nodeZ, text);
+                    link.lineWidth = 3; 
+                    
+                    // 虚线的间距，
+                    link.dashedPattern = dashedPattern;
+                                      
+                    // 折线拐角处的长度
+                    link.bundleOffset = 60;
+                    
+                    // 线条之间的间隔
+                    link.bundleGap = 20;
+                    
+                    // 文本偏移量（向下3个像素）
+                    link.textOffsetY = -6;
+                    
+                    link.strokeColor = "0,200, 255";
+                    scene.add(link);
+                    return link;
+                }
+                var a = 1;
+            });
+            
+        </script>
+    </body>
+</html>

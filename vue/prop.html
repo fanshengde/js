@@ -1,0 +1,173 @@
+<html>
+    <head>
+        <script src="js/vue.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <div id="app1">
+            <app-a title = "1111"></app-a>
+            <app-a title = "22222"></app-a>
+        </div>
+        <hr/>
+        <div id = "app2">
+            <app-a title = "111" sid="a"></app-a>
+        </div>
+        <hr/>
+        <div id = "app3">
+            <app-a title = "title"></app-a>
+        </div>
+        <hr/>
+        <div id = "app4">
+            <app-b v-for="obj in objs" :key="obj.title" v-bind:title="obj.name" v-bind:obj = "obj" v-bind:age = "33" v-bind:flag = "true" v-bind:arr = "[234, 266, 273]"></app-b>
+        </div>
+        <hr/>
+        <div id="app5">
+            <base-checkbox v-model="lovingVue"></base-checkbox>
+            <base-checkbox v-model="lovingVue"></base-checkbox>
+            <base-checkbox v-model="lovingVue"></base-checkbox>
+        </div>
+        <hr/>
+        <!--
+        <div id="app6">
+            <app-six initialCounter="1123"></app-six>
+        </div>-->
+        <hr/>
+        <div id="app7">
+            <app-serven v-for="obj in objs" :key="obj.propA" v-bind:propa = "obj.propA" v-bind:propc = "obj.propC" v-bind:propf = "obj.propF"></app-serven>
+        </div>
+        <hr/>
+        
+        
+        <script>
+            Vue.component("app-serven", {
+                props : {
+                    propa : Number,
+                    propb : [String, Number],
+                    propc : {
+                        type : String,
+                        //required :true
+                    },
+                    propd : {
+                        type : Number,
+                        default : 999
+                    },
+                    prope : {
+                        type : Object,
+                        default : function(){
+                            return {
+                                message : "hello"
+                            }
+                        }
+                    },
+                    propf : {
+                        validator : function( value ){
+                            return ['cuccess', 'warning', 'danger'].indexOf(value) !== -1
+                        }
+                    }
+                },
+                template : '<h3>propA={{ propa }}; propB={{ propb }}; propC={{ propc }}; propD={{ propd }}; propE={{ prope }}; propF={{ propf }}</h3>'
+            });
+            var app7 = new Vue({
+                el : "#app7",
+                data : {
+                    objs : [
+                        {propA : 1, propB : "fsd", propC : "Str3", propF : 'cuccess' },
+                        {propA : 2, propB : "zs", propC: "Str3", propF : 'warning1' }
+                    ]
+                }
+            });
+
+            //有问题，没有实现
+            Vue.component('app-six',{
+                props : ['initialCounter'],
+                template :`
+                    <h3> {{ initialCounter }}</h3>
+                `
+            });
+
+            var app6 = new Vue({
+                //el:"#app6",
+                //props : ['initialCounter'],
+                //data : function(){
+                 //   var initialCounter = "123 ";
+                //    return {
+                //        counter : this.initialCounter
+                 //   }
+                //}
+            });
+
+            Vue.component('base-checkbox', {
+                model : {
+                    props : 'checked',
+                    event : 'change'
+                },
+                template :`
+                    <input type="checkbox">
+                `
+            });
+            
+            var app5 = new Vue({
+                el : "#app5",
+                methods : {
+                    lovingVue : function(){
+                        alert("abc");
+                    }
+                }
+            });
+            
+            Vue.component("app-b", {
+               props : {
+                            title : String,
+                            obj : Object,
+                            age : Number,
+                            flag : Boolean,
+                            arr : Array,
+                        },
+                
+               template : '<h3> {{ title }}  ::: {{ obj }}  ::  {{ age }}    :::   {{ flag }} ::: {{ arr}}</h3>'
+               
+            });
+            
+            var app4 = new Vue({
+                el : "#app4",
+                data : {
+                    objs : [
+                        {id : 1, name : "fsd", age : 33 },
+                        {id : 2, name : "zs", age: 44}
+                    ]
+                }
+            });
+            
+            Vue.component("app-a",{
+                props : {
+                    title : String,
+                    isFlag : Boolean,
+                    age : Number
+                },
+                template : '<h3> {{title}} {{ isFlag}} {{ age}} </h3>',
+            });
+            var app3 = new Vue({
+                el : "#app3"
+            });
+            
+            Vue.component("app-a",{
+                props : ['title', 'sid'],
+                template : '<h3> {{sid}} {{ title}} </h3>'
+            });
+            
+            var app2 = new Vue({
+                el : "#app2"
+            });
+            
+            Vue.component('app-a', {
+                props : ['title'],
+                template : '<h3>{{ title}}</h3>'
+            });
+            var app1 = new Vue({
+                el : "#app1",
+            });
+        </script>
+    </body>
+    
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="cn">
+    <head>
+        <script src="js/vue.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+        <script>
+            Vue.component("button-counter", {
+                //data 必须是一个函数
+                data : function () {
+                    return {
+                        count : 0
+                    }
+                },
+                template : '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+            });
+            
+            Vue.component('blog-post',{
+                props : ['title'],
+                template : '<h3>{{title}}</h3>'
+            });
+            
+           Vue.component('blog-post3', {
+                props : ['post'],
+                template : `
+                    <div class="blog-post">
+                        <h3>{{ post.title }}</h3>
+                        <div v-html="post"></div>
+                    </div>
+                `
+            });
+           
+            Vue.component('app4', {
+                props : ['post'],
+                template : `
+                    <div class="blog-post">
+                        <h3>{{ post.title }}</h3>
+                        <button v-on:click="$emit('enlarge-text')">放大</button>
+                        <div v-html="post"></div>
+                    </div>
+                `
+            });
+            
+            Vue.component('app5', {
+                template : `
+                    <div class="app5">
+                        <strong>Eoor! </strong>
+                        <slot></slot>
+                    </div>
+                `
+            });
+            
+            Vue.component('tab-home', { template: '<div>Home component</div>' })
+            Vue.component('tab-posts', { template: '<div>Posts component</div>' })
+            Vue.component('tab-archive', { template: '<div>Archive component</div>' })
+            
+            
+            
+        </script>
+    </head>
+    
+    <body>
+        <div id = "app1">
+            <!--每个组件都会各自独立维护它的 count。因为你每用一次组件，就会有一个它的新实例被创建。-->
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+        </div>
+        
+        <hr/>
+        <div id = "app2">
+            <blog-post title="1111"></blog-post>
+            <blog-post title="2222"></blog-post>
+            <blog-post title="3333"></blog-post>
+        </div>
+        <hr/>
+        <div id = "app21">
+            <blog-post v-for="post in posts" v-bind:key="post.id" v-bind:title="post.title" ></blog-post>
+        </div>
+        <hr/>
+        <div id="app3">
+           <blog-post3 v-for="post in posts" v-bind:key="post.id" v-bind:post="post"></blog-post3>
+        </div>
+        <hr/>
+        <div id="app4" :style="{fontSize : postFontSize + 'em' } ">
+            <app4 v-for="post in posts" v-bind:key="post.id" v-bind:post="post" v-on:enlarge-text="postFontSize += 1"></app4>
+        </div>
+        <hr/>
+        <div id = "app5">
+            <app5>Something bad happened.</app5>
+        </div>
+        <hr/>
+        <div id="app6" class="demo">
+            <button v-for="tab in tabs" v-bind:key="tab" v-bind:class="{ 'dynamic-component-demo-tab-button-active': tab === currentTab }" v-on:click="currentTab = tab">
+              {{ tab }}
+            </button>
+            <component v-bind:is="currentTabComponent"></component>
+          </div>
+        <hr/>
+        <script>
+            var app6 = new Vue({
+                el: '#app6',
+                data: {
+                  currentTab: 'Home',
+                  tabs: ['Home', 'Posts', 'Archive']
+                },
+                computed: {
+                  currentTabComponent: function () {
+                    return 'tab-' + this.currentTab.toLowerCase();
+                  }
+                }
+            });
+            var app5 = new Vue({
+                el : "#app5"
+            })
+            var app4 = new Vue({
+                 el : "#app4",
+                 data : {
+                    posts : [
+                        {id : 1, title : "app4 111111", other : "aaa"},
+                        {id : 2, title : "app4 222222", other : "bbb"},
+                        {id : 3, title : "app4 333333", other : "cccc"}
+                    ],
+                    postFontSize: 1
+                 }
+            });
+            var app3 = new Vue({
+                 el : "#app3",
+                 data : {
+                    posts : [
+                        {id : 1, title : "app3 111111"},
+                        {id : 2, title : "app3 222222"},
+                        {id : 3, title : "app3 333333"}
+                    ]
+                 }
+            });
+            
+            var app21 = new Vue({
+                el : "#app21",
+                data : {
+                    posts : [
+                        { id: 1, title: 'My journey with Vue' },
+                        { id: 2, title: 'Blogging with Vue' },
+                        { id: 3, title: 'Why Vue is so fun' } 
+                    ]
+                }
+            });
+            var app2 = new Vue({
+                el : "#app2",
+            });
+            var app1 = new Vue({
+                el : "#app1"
+            });
+            
+        </script>
+    </body>
+</html>

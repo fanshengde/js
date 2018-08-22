@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <script type="text/javascript" src="platform/jtopo-0.4.8-min.js"></script>
+        <script type="text/javascript" src="platform/jQuery-2.1.4.min.js"></script>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <canvas width="800" height="600" id="canvas" style="border: 1px solid red; background-color: green;">不支持canvas插件，请更换浏览器</canvas>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                //var canvas = $("#canvas");
+                var canvas = document.getElementById("canvas");
+                var stage = new JTopo.Stage(canvas);
+                var scene = new JTopo.Scene(stage);
+                
+                
+                var cloudNode = new JTopo.Node("root");
+                cloudNode.setSize(30, 26);
+                cloudNode.setLocation(360, 230);
+                cloudNode.layout = {type : 'circle', radius : 150};
+                
+                scene.add(cloudNode);
+                
+                
+                for(var i = 1; i < 4; i++){
+                    var node = new JTopo.CircleNode("host - " + i);
+                    node.fillStyle = "200, 250, 0";
+                    node.radius = 15;
+                    node.setLocation(800 * Math.random(), 500 * Math.random());
+                    
+                    console.log("scene.width * Math.random() = " + scene.width * Math.random());
+                    console.log("scene.height * Math.random() = " + scene.height * Math.random());
+                    
+                    
+                    node.layout = {type : 'circle', radius : 80};
+                    
+                    scene.add(node);
+                    
+                    var link = new JTopo.Link(cloudNode, node);
+                    
+                    scene.add(link);
+                    
+                    for(var j=0; j<6; j++){
+                        var vmNode = new JTopo.CircleNode('vm-' + i + '-' + j);
+                        vmNode.radius = 10;
+                        vmNode.fillStyle = '255,255,0';
+                        vmNode.setLocation(800 * Math.random(), 600 * Math.random());
+                        scene.add(vmNode);                                
+                        scene.add(new JTopo.Link(node, vmNode));                            
+                    }
+                    
+                     //JTopo.layout.layoutNode(scene, cloudNode, true);
+                
+                }
+                
+                JTopo.layout.layoutNode(scene, cloudNode, true);
+                
+            });
+            
+        </script>
+    </body>
+</html>

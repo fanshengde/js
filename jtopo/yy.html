@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <script type="text/javascript" src="platform/jtopo-0.4.8-min.js"></script>
+        <script type="text/javascript" src="platform/jQuery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="platform/toolbar.js"></script>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <canvas width="1200" height="800" id="canvas" style="border: 1px solid red; background-color: #323D35;">不支持canvas插件，请更换浏览器</canvas>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+               var canvas = document.getElementById("canvas");
+               
+               var stage = new JTopo.Stage(canvas);
+        
+               
+               var scene = new JTopo.Scene(stage);
+               scene.backgroundColor = "0,200,0";
+              
+               scene.alpha = 0.1;        
+            
+               for(var i= 0; i<500; i++){
+                    var node = new JTopo.Node('' + i);
+                    node.shadow = false;
+                    node.setSize(30, 30);
+                    node.rotate = Math.random(); // 旋转角度
+                    node.textPosition = "Middle_Center";
+                    var s = 2;
+                    var x = Math.random() * stage.width * s - Math.random() * stage.width * s;
+                    var y = Math.random() * stage.height * s - Math.random() * stage.height * s;
+                    node.setLocation(x, y);
+                    node.fillColor = JTopo.util.randomColor();
+                    
+                    scene.add(node);
+             };
+             
+             
+             //鹰眼开关
+             stage.eagleEye.visible = true;
+           
+            
+            });
+            
+            
+            
+        </script>
+    </body>
+    
+</html>

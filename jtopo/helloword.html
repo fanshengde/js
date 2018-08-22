@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <script type="text/javascript" src="platform/jtopo-0.4.8-min.js"></script>
+        <script type="text/javascript" src="platform/jQuery-2.1.4.min.js"></script>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <canvas width="800" height="600" id="canvas" style="border: 1px solid red; background-color: green;">不支持canvas插件，请更换浏览器</canvas>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                //var canvas = $("#canvas");
+                var canvas = document.getElementById("canvas");
+                var stage = new JTopo.Stage(canvas);
+                var scene = new JTopo.Scene(stage);
+                
+                var node = new JTopo.Node("hello");
+                node.setLocation(100, 200); // 设置节点坐标
+                node.setSize(100, 200);
+                node.fillColor = "255, 0, 255";
+                
+                var setNode = new JTopo.Node("set node");
+                setNode.setLocation(300,400);
+                setNode.rotate = Math.random(); //旋转角度
+                
+                
+                
+                var imgNode = new JTopo.Node("image");
+                imgNode.setImage("img/server.png");
+                
+                
+                //连线
+                var nodeFrom = new JTopo.Node("from");
+                var nodeTo = new JTopo.Node("to");
+                
+                nodeFrom.setLocation(50,10);
+                nodeTo.setLocation(200,20);
+                
+                var link = new JTopo.Link(nodeFrom, nodeTo);
+                
+                
+                scene.add(node);
+                scene.add(setNode);
+                scene.add(imgNode);
+                scene.add(nodeFrom);
+                scene.add(nodeTo);
+                scene.add(link);
+            });
+            
+        </script>
+    </body>
+</html>

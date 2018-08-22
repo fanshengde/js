@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <script type="text/javascript" src="platform/jtopo-0.4.8-min.js"></script>
+        <script type="text/javascript" src="platform/jQuery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="platform/toolbar.js"></script>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <canvas width="1200" height="800" id="canvas" style="border: 1px solid red; background-color: #323D35;">不支持canvas插件，请更换浏览器</canvas>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+               var canvas = document.getElementById("canvas");
+               
+               var stage = new JTopo.Stage(canvas);
+        
+               
+               var scene = new JTopo.Scene(stage);
+               scene.backgroundColor = "0,200,0";
+              
+               scene.alpha = 0.1;        
+                
+                var msgNode = new JTopo.TextNode("双击编辑文字, 点击节点可连线(连个节点)" );
+                
+                msgNode.zIndex++;
+                msgNode.setBound(250,50);
+                
+                scene.add(msgNode);
+                
+                
+                for(var i = 0; i < 5; i++){
+                    var node = new JTopo.Node("Node " + i );
+                    node.setLocation(Math.random() * 600, Math.random() * 400);
+                    scene.add(node);
+                }
+                
+                
+                var beginNode = null;
+                
+                var tempNodeA = new JTopo.Node("tempA");
+                tempNodeA.setSize(1,1);
+                
+                
+                var tempNodeZ = new JTopo.Node("tempZ");
+                tempNodeZ.setSize(1,1);
+                
+                var link =new JTopo.Link(tempNodeA, tempNodeZ);
+                
+                
+                scene.mouseup(function(e){
+                    if(e.button == 2){
+                        scene.remove(link);
+                    }
+                    console.log(e.button);
+                    
+                    if(e.target != null && e.target instanceof JTopo.Node){
+                        if(beginNode == null){
+                            beginNode = e.target;
+                            scene.add(link);
+                            tempNodeA.setLocation(e.x, e.y);
+                            tempNodeZ.setLocation(e.x, e.y);
+                        }else if(beginNode !== e.target ){
+                            var endNode = e.target;
+                            var l = new JTopo.Link(beginNode, endNode);
+                            scene.add(l);
+                            beginNode = null;
+                            scene.remove(link);
+                        }else{
+                            beginNode = null;
+                        }
+                    }else{
+                        scene.remove(link);
+                    }
+                });
+                
+                
+                scene.mousedown(function(e){
+                    if(e.target == null || e.target === beginNode || e.target === link){
+                        console.log("   down : " + e.target);
+                        scene.remove(link);
+                    }
+                });
+                
+                
+                scene.mousemove(function(e){
+                    tempNodeZ.setLocation(e.x, e.y);
+                });
+                
+                
+                var textfield = $("#jtopo_textfield");
+                scene.dbclick(function(event){
+                    if(event.target == null){
+                        return;
+                    }
+                    
+                    var e = event.target;
+                    
+                    textfield.css({
+                        top : event.pageY,
+                        left : event.pageX = e.width /2
+                    }).show().attr("value", e.text).focus().select();
+                });
+                
+                
+                $("#jtopo_textfield").blur(function(){
+                    textfield[0].JTopoNode.text = textfield.hide().val();
+                });
+           
+            
+            });
+            
+            
+            
+        </script>
+    </body>
+    
+</html>

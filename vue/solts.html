@@ -1,0 +1,64 @@
+<html lang="zh-CN">
+    <head>
+        <script src="js/vue.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <div id="app1">
+            <app-a url="/profile">
+                Your Profile
+            </app-a>
+        </div>
+        <div id="app2">
+            <base-layout>
+                <template slot="header">
+                  <h1>header --- Here might be a page title</h1>
+                </template>
+              
+                <p>A paragraph for the main content.</p>
+                <p>And another one.</p>
+              
+                <template slot="footer">
+                  <p>footer --- Here's some contact info</p>
+                </template>
+              </base-layout>
+        </div>
+        
+        <script>
+            Vue.component("base-layout", {
+                template : `
+                    <div class="container">
+                    <header>
+                      <slot name="header"></slot>
+                    </header>
+                    <main>
+                      <slot></slot>
+                    </main>
+                    <footer>
+                      <slot name="footer"></slot>
+                    </footer>
+                  </div>
+                `
+            });
+            
+            var app2 = new Vue({
+                el : "#app2"
+            });
+            
+           Vue.component("app-a",{
+                props : ['url'],
+                template : `
+                    <a v-bind:href="url" class="nav-link">
+                        <slot></slot>
+                    </a>
+                `
+           });
+           
+           var app1 = new Vue({
+                el : "#app1"
+            });
+        </script>
+    </body>
+    
+</html>

@@ -1,0 +1,92 @@
+<html lang="zh-CN">
+    <head>
+        <script src="js/vue.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+        <style>
+            .dynamic-component-demo-tab-button{
+                padding: 6px 10px;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                background: #f0f0f0;
+                margin-bottom: -1px;
+                margin-right: -1px;
+            }
+            #demo, .demo, .content .demo{  
+              border: 1px solid #eee;
+              border-radius: 2px;
+              padding: 25px 35px;
+              margin-top: 1em;
+              margin-bottom: 40px;
+              font-size: 1.2em;
+              line-height: 1.5em;
+              -webkit-user-select: none;
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+              overflow-x: auto;
+            }
+            .dynamic-component-demo-posts-tab{
+                display: flex;
+            }
+            .dynamic-component-demo-tab{
+                    border: 1px solid #ccc;
+                 padding: 10px;
+            }
+            .dynamic-component-demo-posts-sidebar{
+                    max-width: 40vw;
+    margin: 0 !important;
+    padding: 0 10px 0 0 !important;
+    list-style-type: none;
+    border-right: 1px solid #ccc;
+            }
+            ul{
+                    display: block;
+            }
+            button {
+                    text-rendering: auto;
+    color: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    margin: 0em;
+    font: 400 13.3333px Arial;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="app1" currentRoute="></div>
+   
+        <script>
+            const NotFound = { template: '<p>Page not found</p>' };
+            const Home = { template: '<p>home page</p>' };
+            const About = { template: '<p>about page</p>' };
+            
+            const routes = {
+              '/': Home,
+              '/about': About
+            };
+            
+            new Vue({
+                el: '#app1',
+                data: {
+                  currentRoute: window.location.pathname
+                },
+                computed: {
+                  ViewComponent () {
+                    return routes[this.currentRoute] || NotFound
+                  }
+                },
+                render (h) { return h(this.ViewComponent) }
+            })
+          
+        </script>
+    </body>
+    
+</html>

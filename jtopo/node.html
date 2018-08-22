@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <script type="text/javascript" src="platform/jtopo-0.4.8-min.js"></script>
+        <script type="text/javascript" src="platform/jQuery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="platform/toolbar.js"></script>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <canvas width="800" height="600" id="canvas" style="border: 1px solid red; background-color: #fff;">不支持canvas插件，请更换浏览器</canvas>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+               var canvas = document.getElementById("canvas");
+               
+               var stage = new JTopo.Stage(canvas);
+               
+               //显示工具栏
+               showJTopoToobar(stage);
+               
+               var scene = new JTopo.Scene(stage);
+               
+               var defaultNode = new JTopo.Node();
+               defaultNode.text = "微软雅黑";
+               defaultNode.textPosition="Middle_Center";
+               defaultNode.textOffsetY = 8;
+               defaultNode.font = "14px 微软雅黑";
+               defaultNode.setLocation(180,100);
+               defaultNode.setSize(100,60);
+               defaultNode.borderRadius = 5;
+               defaultNode.borderColor = "255,255,255";
+               defaultNode.alpha = 0.7;
+              
+               
+               
+               
+               var imgNode = new JTopo.Node();
+               imgNode.alpha = 0.7;
+               imgNode.setImage("img/server.png");
+               imgNode.setLocation(320, 80);
+               imgNode.showSelected = false; //不显示选中矩形
+               
+               
+               var textNode = new JTopo.TextNode("This is text node");
+               textNode.font = "bold 16px 微软雅黑";
+               textNode.setLocation(317, 250);
+               textNode.fontColor = "0,255,0";
+               
+               
+               var linkNode = new JTopo.LinkNode("超链接");
+               linkNode.href="http://www.jtopo.com";
+               linkNode.target = "_blank"; // 新窗口打开链接
+               linkNode.font = 'italic bold 16px 微软雅黑';
+               linkNode.fontColor = "0,255,0";
+               linkNode.visitedColor = "0,0,255";
+               linkNode.shadowOffsetX = 5;
+               linkNode.shadowOffsetY = 16;
+               linkNode.setLocation(250, 360);
+               
+               
+               var otherNode = new JTopo.Node("同时设置大小及位置");
+               otherNode.setBound(500,200, 33,64);
+               
+               
+               var circleNode = new JTopo.CircleNode('node');
+               circleNode.radius = 25;
+               circleNode.alpha = 0.7;
+               circleNode.fillColor = "0,0,255";
+               circleNode.setLocation(508, 100);
+               circleNode.textPosition = "Middle_Center";
+               
+               
+               var node = new JTopo.Node("自定义");
+               node.percent = 0.8;
+               node.beginDegree = 0;
+               node.width = node.height = 60;
+               node.setLocation(200, 210);
+               
+               node.paint = function(g){
+                    g.beginPath();
+                    g.moveTo(0,0);
+                    g.fillStyle = "rgba(0,255,0," + this.alpha + ")";
+                    g.arc(0, 0, this.width/2, this.beginDegree, this.beginDegree + 2 * Math.PI * this.percent);
+                    g.fill();
+                    g.closePath();
+                    
+                    g.save();
+                    g.beginPath();
+                    g.fillStyle = "rgba(255,255,0," + this.alpha + ")";
+                    g.moveTo(0,0);
+                    g.arc(0, 0, this.width/2 - 10, this.beginDegree, this.beginDegree + 2 * Math.PI);
+                    g.fill();
+                    g.closePath();
+                    g.restore();
+               };
+               
+               
+               scene.add(defaultNode);
+               scene.add(imgNode);
+               scene.add(textNode);
+               scene.add(linkNode);
+               scene.add(otherNode);
+               scene.add(circleNode);
+               scene.add(node);
+            });
+            
+        </script>
+    </body>
+</html>
