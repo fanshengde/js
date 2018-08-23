@@ -38,25 +38,85 @@
         <hr/>
         <div id="app5">
             <app-5 v-model="searchText"></app-5>
+            <span>{{ searchText }}</span>
+            <!--
+                等价于：
+                <input
+                    v-bind:value="searchText"
+                    v-on:input="searchText = $event.target.value"
+                >
+            -->
         </div>
         <hr/>
+        <div id="app6">
+            <app-6>
+                    Something bad happened.
+            </app-6>
+        </div>
         <hr/>
+        <div id="app7" class="demo">
+            <button v-for="tab in tabs" v-bind:key="tab" v-bind:class="{ 'dynamic-component-demo-tab-button-active': tab === currentTab }" v-on:click="currentTab = tab">
+                {{ tab }}
+            </button>
+            <component v-bind:is="currentTabComponent"></component>
+        </div>
         <hr/>
         
         
         
         <script>
+            Vue.component('tab-home', { 
+                template: '<div>Home component</div>' 
+            });
+
+            Vue.component('tab-posts', { 
+                template: '<div>Posts component</div>' 
+            });
+            
+            Vue.component('tab-archive', { 
+                template: '<div>Archive component</div>' 
+            });
+
+            var app7 = new Vue({
+                el: '#app7',
+                data: {
+                  currentTab: 'Home',
+                  tabs: ['Home', 'Posts', 'Archive']
+                },
+                computed: {
+                  currentTabComponent: function () {
+                    return 'tab-' + this.currentTab.toLowerCase();
+                  }
+                }
+            });
+
+            //插槽分发内容
+            Vue.component("app-6",{
+                template : `
+                    <div class="app6">
+                        <strong>Error!</strong>
+                        <slot></slot>
+                    </div>
+                `
+            });
+            var app6 = new Vue({
+                el : "#app6"
+            });
+
             Vue.component("app-5",{
-                props : ['searchText'],
+                props : ['value'],
                 template : `
                     <input
-                        v-bind:searchText="searchText"
+                        v-bind:value="value"
                         v-on:input = "$emit('input', $event.target.value)"
                     />
                 `
             });
             var app5 = new Vue({
-                el : "#app5"
+                el : "#app5",
+                data : {
+                    searchText : 100
+                }
             });
 
             Vue.component("input-41",{
