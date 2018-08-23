@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="cn">
+    <head>
+        <script src="js/vue.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+    </head>
+    
+    <body>
+        <div id = "app1">
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+        </div>
+        <hr/>
+
+        <div id="app2">
+            <input-2 title="123123"></input-2>
+        </div>
+        <div id="app21">
+            <input-2 v-for="post in posts" v-bind:key="post.id" v-bind:title="post.title"></input-2>
+        </div>
+        <hr/>
+        <div id="app3">
+            <input-3 title="input3" content="it's countent"></input-3>
+        </div>
+        <hr/>
+        <div id="app31">
+                <input-31 v-for="post in posts" v-bind:key="post.id" v-bind:post="post"></input-31>
+        </div>
+        <hr/>
+        <div id="app4" :style="{fontSize : postFontSize + 'em'}">
+            <input-4 title="app4" v-on:enlarge-text="postFontSize += 0.1" v-on:enlarge-text2="postFontSize -= 0.1"></input-4>
+        </div>
+        <hr/>
+        <div id="app41" :style="{fontSize : postFontSize + 'em'}">
+                <input-41 title="app41" v-on:enlarge-text="postFontSize += $event" v-on:enlarge-text2="postFontSize -= $event"></input-41>
+            </div>
+        <hr/>
+        <div id="app5">
+            <app-5 v-model="searchText"></app-5>
+        </div>
+        <hr/>
+        <hr/>
+        <hr/>
+        
+        
+        
+        <script>
+            Vue.component("app-5",{
+                props : ['searchText'],
+                template : `
+                    <input
+                        v-bind:searchText="searchText"
+                        v-on:input = "$emit('input', $event.target.value)"
+                    />
+                `
+            });
+            var app5 = new Vue({
+                el : "#app5"
+            });
+
+            Vue.component("input-41",{
+                props : ['title'],
+                template : `
+                    <div class="input4">
+                        <h3> {{ title }} </h3>
+                        <button v-on:click="$emit('enlarge-text', 0.2)">
+                            放大
+                        </button>
+                        <button v-on:click="$emit('enlarge-text2', 0.3)">
+                            缩小
+                        </button>
+                    </div>
+                `
+            });
+
+             var app41 = new Vue({
+                el : "#app41",
+                data : {
+                    postFontSize : 1
+                }
+            });
+
+            Vue.component("input-4",{
+                props : ['title'],
+                template : `
+                    <div class="input4">
+                        <h3> {{ title }} </h3>
+                        <button v-on:click="$emit('enlarge-text')">
+                            放大
+                        </button>
+                        <button v-on:click="$emit('enlarge-text2')">
+                            缩小
+                        </button>
+                    </div>
+                `
+            });
+
+            var app4 = new Vue({
+                el : "#app4",
+                data : {
+                    postFontSize : 1
+                }
+            });
+
+            Vue.component("input-31",{
+                props : ['post'],
+                template : `
+                    <div class="input31">
+                        <h3> {{ post.title}} </h3>
+                        <div v-html="post.content"></div>
+                        <div v-html="post.publishedAt"></div>
+                        <div v-html="post.comments"></div>
+                    </div>
+                `
+            });
+
+            var app31 = new Vue({
+                el : "#app31",
+                data : {
+                    posts : [
+                        { id: 1, title: 'My journey with Vue', content : 'content1', publishedAt : 'publishedAt1', comments : 'comments1'},
+                        { id: 2, title: 'Blogging with Vue', content : 'content2', publishedAt : 'publishedAt2', comments : 'comments2' },
+                        { id: 3, title: 'Why Vue is so fun', content : 'content3', publishedAt : 'publishedAt3', comments : 'comments' }
+                    ]
+                }
+            })
+
+
+            Vue.component("input-3",{
+                props : ['title','content'],
+                template : `
+                    <div class="input3">
+                        <h3> {{ title }}</h3>
+                        <div v-html="content"></div>
+                    </div>
+                `
+            });
+            var app3 = new Vue({
+                el : "#app3"
+            });
+
+            Vue.component("input-2",{
+                props : ['title'],
+                template : `
+                    <h3> {{ title }} </h3>
+                `
+            });
+
+            var app2 = new Vue({
+                el : "#app2"
+            });
+
+            var app21 = new Vue({
+                el : "#app21",
+                data : {
+                    posts : [
+                        { id: 1, title: 'My journey with Vue' },
+                        { id: 2, title: 'Blogging with Vue' },
+                        { id: 3, title: 'Why Vue is so fun' }
+                        ]
+                }
+            })
+
+            Vue.component("button-counter",{
+                data : function (){
+                    return{
+                        count : 0
+                    }
+                },
+                template : `
+                    <button v-on:click="count++">You clicked me {{ count }} times </button>
+                `
+            });
+
+            var app1 = new Vue({
+                el : "#app1"
+            });
+            
+        </script>
+    </body>
+</html>
