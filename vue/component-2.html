@@ -6,21 +6,22 @@
     
     <body>
         <div id="app1">
-            <c-base-checkbox v-model="lovingVue" v-bind:checked='true'></c-base-checkbox>
+            <base-checkbox v-model="lovingVue" v-bind:checked='true'></base-checkbox>
+            <base-checkbox v-model="lovingVue" v-bind:checked='false'></base-checkbox>
+            <span> {{ lovingVue }} </span>
         </div>
         <script>
-             Vue.component("c-base-checkbox", {
+             Vue.component("base-checkbox", {
                 model : {
-                    prop : 'checked',
                     event : "change"
                 },
                 props : {
-                    checked : Boolean,
+                    checked : Boolean
                 },
                 template : `
                     <input 
                         type="checkbox"
-                        v-bind:checked = "checked",
+                        v-bind:checked = "checked"
                         v-on:change = "$emit('change', $event.target.checked)"
                     />
                 `
@@ -28,11 +29,9 @@
 
             var app1 = new Vue({
                 el : "#app1",
-                methods : {
-                    lovingVue : function(){
-                        alert("abc");
-                    }
-                }
+                data : {
+                    lovingVue : true
+                },
             });
            
         </script>
